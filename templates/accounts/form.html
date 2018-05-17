@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+{% load crispy_forms_tags %}
+{% block title %} Contact For me -{{ block.super }} {% endblock %}
+
+
+
+
+{% block form %}
+    <br>
+
+    <div class="container">
+        <div class="row">
+            <div class="col-md-11 col-md-offset-3">
+                <form method="POST" id="asas">
+                    {% csrf_token %}
+                    <div class="h3basliklar">
+                        <h3 style="text-align:center; color:aqua;" >Contact We</h3>
+                    </div>
+
+                    {{ form|crispy }}
+                    <input class="btn btn-primary" style="margin-bottom:20px" type="submit" value="Send">
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <footer class="mastfoot mt-auto">
+        <div class="inner">
+            <p>This website is in trial period.Will begin to be used on demand</p>
+          <p>Contact for me and come and serve in size >> <a href="https://twitter.com/hamitvarmis">@hamitvarmis</a>.</p>
+        </div>
+      </footer>
+
+{% endblock %}

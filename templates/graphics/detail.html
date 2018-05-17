@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+{% load static %}
+{% block form %}
+
+{% if not user.is_authenticated %}
+    <br>
+    <img src='{% static "img/smart-house2.jpg" %}' style="width:auto;" width="50px" height="450" ><br>
+
+    <br>
+    <p>
+        <b>
+            <font color="white">
+                We want to serve you to ensure your home security.
+                We keep the values of humidity and noise in your houses and monitor them instantly.
+                In case of emergency, we aim to find a solution quickly by notifying the necessary security units and you.
+                If the temperature values in your house increase, you will be notified first after the fire. We aim to solve it quickly.
+                Thanks to the sensors we will install in your home, we will instantly reflect this information to you and you will be able to monitor these values at any time.
+
+            </font>
+        </b>
+    </p>
+
+
+{% else %}
+    <div align="center"><img src="/static/my_figure.png" alt="My Graphs" align="center"></div>
+    <br>
+    <p>
+        <b>
+            <font color="aqua">
+                Your home is in good condition.Thank you for your trust in us.
+            </font>
+        </b>
+    </p>
+{% endif %}
+
+{% endblock %}
+
