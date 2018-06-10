@@ -28,6 +28,11 @@
         <b>
             <font color="aqua">
                 Your home is in good condition.Thank you for your trust in us.
+                {% if pic %}
+                <li class="{{ message.tags }}">{{ pic }}</li>
+                {% endif %}
+
+
             </font>
         </b>
     </p>

@@ -37,16 +37,18 @@ def graphic_view(request):
 
 
 def detail_view(request):
-    from .models import Data,User
-
+    from .models import Data, User
+    from django.contrib import messages
     import matplotlib.pyplot as plt
-
-   #  my_user = User.objects.all().get(username = request.user.username).id
-    if request.user.is_authenticated():
+    import os
+    # my_user = User.objects.all().get(username = request.user.username).id
+    os.chdir("./graphics/static")
+    context={}
+    if "my_figure.png" in os.listdir():
         y_temperature = list(Data.objects.values_list("temperature").filter(user_id=3).order_by("-id")[:])
         y_noise = list(Data.objects.values_list("noise").filter(user_id=3).order_by("-id")[:])
         y_light = list(Data.objects.values_list("light").filter(user_id=3).order_by("-id")[:])
-        # x_time = Data.objects.values_list("datetime").filter(user_id=2).order_by("-id")[:]
+        # x_time = list(Data.objects.values_list("date").filter(user_id=3).order_by("-id")[:])
         y_temperature_end = list()
         y_noise_end = list()
         y_light_end = list()
@@ -59,33 +61,73 @@ def detail_view(request):
         for y_l in y_light:
             for n in y_l:
                 y_light_end.append(n)
-        x = [0, 1,2]
         fig = plt.figure()
         ax = plt.subplot(111)
         ax2 = plt.subplot(111)
         ax3 = plt.subplot(111)
-
+        x = [0, 1, 2, 3, 4]
         ax.plot(x, y_temperature_end, label="Temperature")
         ax2.plot(x, y_noise_end, label="Noise")
         ax3.plot(x, y_light_end, label="Light")
-
         plt.xlabel("Time")
         plt.ylabel("Data's")
         plt.title("my-graph")
-
         ax.legend()
         ax2.legend()
         ax3.legend()
 
-        fig.savefig("./graphics/static/my_figure.png")
-        context = {
-            "pic": "User"
-        }
-    else:
+        fig.savefig("./my_figure2.png")
+        a = os.stat('./my_figure.png')
+        a2 = os.stat("./my_figure2.png")
 
-        context = {
-            "pic": "Guest"
-        }
+        if a.st_size == a2.st_size:
+            os.remove("./my_figure2.png")
+        fig.clear()
+        plt.close()
+    else:
+        y_temperature = list(Data.objects.values_list("temperature").filter(user_id=3).order_by("-id")[:])
+        y_noise = list(Data.objects.values_list("noise").filter(user_id=3).order_by("-id")[:])
+        y_light = list(Data.objects.values_list("light").filter(user_id=3).order_by("-id")[:])
+        # x_time = list(Data.objects.values_list("date").filter(user_id=3).order_by("-id")[:])
+        y_temperature_end = list()
+        y_noise_end = list()
+        y_light_end = list()
+        for y_t in y_temperature:
+            for x in y_t:
+                y_temperature_end.append(x)
+        for y_n in y_noise:
+            for i in y_n:
+                y_noise_end.append(i)
+        for y_l in y_light:
+            for n in y_l:
+                y_light_end.append(n)
+        fig = plt.figure()
+        ax = plt.subplot(111)
+        ax2 = plt.subplot(111)
+        ax3 = plt.subplot(111)
+        x = [0, 1, 2, 3, 4]
+        ax.plot(x, y_temperature_end, label="Temperature")
+        ax2.plot(x, y_noise_end, label="Noise")
+        ax3.plot(x, y_light_end, label="Light")
+        plt.xlabel("Time")
+        plt.ylabel("Data's")
+        plt.title("my-graph")
+        ax.legend()
+        ax2.legend()
+        ax3.legend()
+
+        fig.savefig("./my_figure.png")
+
+    os.chdir("..")
+    os.chdir("..")
+
+    for q in range(len(y_temperature)):
+        if y_temperature[q][0] > 60:
+            context = {
+                "pic": "Danger"
+            }
+            messages.warning(request, "YOUR HOME IN FIRE!!!")
+            break
 
     return render(request, 'graphics/detail.html', context)
 
@@ -121,5 +163,4 @@ def user_form(request):
 def login_view(request):
 
     return render(request, "login.html",{})
-
 
